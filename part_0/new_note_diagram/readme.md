@@ -11,7 +11,7 @@ sequenceDiagram
         server->>browser: Sends the notes.html file
         deactivate server
         
-        Notes right of browser: renders the html document. Detects a stylesheet
+        Note right of browser: renders the html document. Detects a stylesheet
         
         browser->>server: Requests main.css as GET at https://studies.cs.helsinki.fi/exampleapp/main.css
         activate server
