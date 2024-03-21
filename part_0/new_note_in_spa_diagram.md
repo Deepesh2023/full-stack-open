@@ -1,23 +1,26 @@
 ```mermaid
 
-    flowchart TD
+    sequenceDiagram
 
-        step1(User inputs a value into the text field and clicks the submit button)
+        participant Browser
+        participant Server
 
-        step2(The event listener function inside the spa.js file gets triggered and a chain of actions follows)
+        Note right of Browser: User inputs a value into the text field and clicks the submit button
 
-        step3(The value that has been given as input is stored in an object variable called 'note' along with the date it was submitted)
+        Note right of Browser: The event listener function inside the spa.js file gets triggered and a chain of actions follows
 
-        step4(The new value 'note' is pushed into an array of other similar elements called 'notes')
+        Note right of Browser: The value that has been given as input is stored in an object variable called 'note' along with the date it was submitted
 
-        step5(The value inside the text field on the browser interface is replaced with "")
+        Note right of Browser: The new value 'note' is pushed into an array of other similar elements called 'notes'
 
-        step6(Then calls another function called 'redrawnotes' which re-renders the the list of 'notes' which was already preloaded in the browser along with the new input value)
+        Note right of Browser: The value inside the text field on the browser interface is replaced with ""
 
-        step7(Calls another function called 'sendToServer' with the 'note' variable as argument.)
+        Note right of Browser: Then calls another function called 'redrawnotes' which re-renders the the list of 'notes' which was already preloaded in the browser along with the new input value
 
+        Note right of Browser: Calls another function called 'sendToServer' with the 'note' variable as argument.
 
-        step1-->step2-->step3-->step4-->step5-->step6-->step7
+        Brower->>Server: The new input value gets send as POST throught the 'sendToServer' function.
+
 
 
 ```
