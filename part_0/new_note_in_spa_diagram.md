@@ -1,6 +1,6 @@
 ```mermaid
 
-    flowchart
+    flowchart LR
 
     subgraph Browser
     direction TB
@@ -13,9 +13,9 @@
 
         step4(The new value 'note' is pushed into an array of other similar elements called 'notes')
 
-        step5(The value inside the text field on the browser interface is replaced with "")
+        step5(The value inside the text field on the browser interface is replaced with double quotation marks)
 
-        step6(Then calls another function called 'redrawnotes' which re-renders the the list of 'notes' which was already preloaded in the browser along with the new input value)
+        step6(Then calls another function called 'redrawnotes' which re-renders the the list of 'notes' which was already preloaded in the browser along with the new input value ie note)
 
         step7(Calls another function called 'sendToServer' with the 'note' variable as argument.)
 
@@ -26,6 +26,7 @@
     direction LR
         Browser ====> |"` **Sends the value input by the user as POST** `"| Server
     end
+
 
     style New_note_in_spa fill: #fff
     style Browser fill: #7faee3
