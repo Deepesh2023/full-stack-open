@@ -55,6 +55,14 @@ const Heading = ({ heading }) => {
 };
 
 const StatDisplay = ({ statCategory: statCategories }) => {
+  if (statCategories.total == 0) {
+    return (
+      <>
+        <p>No feedback given</p>
+      </>
+    );
+  }
+
   return (
     <>
       <StatCategory statsName="Good" stats={statCategories.good} />
