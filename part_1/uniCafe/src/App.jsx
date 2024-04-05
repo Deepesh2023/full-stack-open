@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 const App = () => {
-  const [statCategory, setStats] = useState({
+  const [statCategories, setStats] = useState({
     good: 0,
     neutral: 0,
     bad: 0,
@@ -11,11 +11,11 @@ const App = () => {
   });
 
   const buttonAction = (selectedStat) => {
-    const updatedSelectedStat = statCategory[selectedStat] + 1;
-    const updatedTotal = statCategory.total + 1;
+    const updatedSelectedStat = statCategories[selectedStat] + 1;
+    const updatedTotal = statCategories.total + 1;
 
     const updatedStats = {
-      ...statCategory,
+      ...statCategories,
       [selectedStat]: updatedSelectedStat,
       total: updatedTotal,
     };
@@ -41,15 +41,7 @@ const App = () => {
       <Button buttonName="Neutral" buttonAction={buttonAction("neutral")} />
       <Button buttonName="Bad" buttonAction={buttonAction("bad")} />
       <Heading heading="statistics" />
-      <Statistics statsName="Good" stats={statCategory.good} />
-      <Statistics statsName="Neutral" stats={statCategory.neutral} />
-      <Statistics statsName="Bad" stats={statCategory.bad} />
-      <Statistics statsName="All" stats={statCategory.total} />
-      <Statistics statsName="Average" stats={statCategory.average} />
-      <Statistics
-        statsName="Positive"
-        stats={statCategory.positivePercentage + " %"}
-      />
+      <StatDisplay statCategory={statCategories} />
     </div>
   );
 };
@@ -62,7 +54,23 @@ const Heading = ({ heading }) => {
   );
 };
 
-const Statistics = ({ statsName, stats }) => {
+const StatDisplay = ({ statCategory: statCategories }) => {
+  return (
+    <>
+      <StatCategory statsName="Good" stats={statCategories.good} />
+      <StatCategory statsName="Neutral" stats={statCategories.neutral} />
+      <StatCategory statsName="Bad" stats={statCategories.bad} />
+      <StatCategory statsName="All" stats={statCategories.total} />
+      <StatCategory statsName="Average" stats={statCategories.average} />
+      <StatCategory
+        statsName="Positive"
+        stats={statCategories.positivePercentage + " %"}
+      />
+    </>
+  );
+};
+
+const StatCategory = ({ statsName, stats }) => {
   return (
     <>
       <p>
