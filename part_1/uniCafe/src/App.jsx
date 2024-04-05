@@ -36,12 +36,12 @@ const App = () => {
 
   return (
     <div>
-      <Heading heading="give feedback" />
+      <Heading heading="Give feedback" />
       <Button buttonName="Good" buttonAction={buttonAction("good")} />
       <Button buttonName="Neutral" buttonAction={buttonAction("neutral")} />
       <Button buttonName="Bad" buttonAction={buttonAction("bad")} />
-      <Heading heading="statistics" />
-      <StatDisplay statCategory={statCategories} />
+      <Heading heading="Statistics" />
+      <StatDisplay statData={statCategories} />
     </div>
   );
 };
@@ -54,8 +54,8 @@ const Heading = ({ heading }) => {
   );
 };
 
-const StatDisplay = ({ statCategory: statCategories }) => {
-  if (statCategories.total == 0) {
+const StatDisplay = ({ statData }) => {
+  if (statData.total == 0) {
     return (
       <>
         <p>No feedback given</p>
@@ -65,15 +65,17 @@ const StatDisplay = ({ statCategory: statCategories }) => {
 
   return (
     <>
-      <StatCategory statsName="Good" stats={statCategories.good} />
-      <StatCategory statsName="Neutral" stats={statCategories.neutral} />
-      <StatCategory statsName="Bad" stats={statCategories.bad} />
-      <StatCategory statsName="All" stats={statCategories.total} />
-      <StatCategory statsName="Average" stats={statCategories.average} />
-      <StatCategory
-        statsName="Positive"
-        stats={statCategories.positivePercentage + " %"}
-      />
+      <table>
+        <StatCategory statsName="Good" stats={statData.good} />
+        <StatCategory statsName="Neutral" stats={statData.neutral} />
+        <StatCategory statsName="Bad" stats={statData.bad} />
+        <StatCategory statsName="All" stats={statData.total} />
+        <StatCategory statsName="Average" stats={statData.average} />
+        <StatCategory
+          statsName="Positive"
+          stats={statData.positivePercentage + " %"}
+        />
+      </table>
     </>
   );
 };
@@ -81,9 +83,10 @@ const StatDisplay = ({ statCategory: statCategories }) => {
 const StatCategory = ({ statsName, stats }) => {
   return (
     <>
-      <p>
-        {statsName} {stats}
-      </p>
+      <tr>
+        <td>{statsName}</td>
+        <td>{stats}</td>
+      </tr>
     </>
   );
 };
