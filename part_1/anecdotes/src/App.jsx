@@ -12,18 +12,39 @@ const App = () => {
     "The only way to go fast, is to go well.",
   ];
 
+  const anecdoteVotePairObject = {};
+  anecdotes.forEach((anecdote) => {
+    anecdoteVotePairObject[anecdote] = 0;
+  });
+
   let [selected, setSelected] = useState(0);
+  const [voteForEachAnecdote, setVoteForSelectedAnecdote] = useState({
+    ...anecdoteVotePairObject,
+  });
 
   const selectRandomAnecdote = () => {
     const randomNumber = Math.round(Math.random() * (anecdotes.length - 1));
     setSelected((selected = randomNumber));
   };
 
-  console.log(selected);
+  const voteForCurrentAnecdote = () => {
+    const currentAnecdote = anecdotes[selected];
+    const updatedVoteForCurrentAnecdote = (voteForEachAnecdote[
+      currentAnecdote
+    ] += 1);
+    setVoteForSelectedAnecdote({
+      ...voteForEachAnecdote,
+      currentAnecdote: updatedVoteForCurrentAnecdote,
+    });
+  };
 
   return (
     <>
       <div>{anecdotes[selected]}</div>
+      <p>Has {voteForEachAnecdote[anecdotes[selected]]}</p>
+      <button type="button" onClick={voteForCurrentAnecdote}>
+        Vote
+      </button>
       <button type="button" onClick={selectRandomAnecdote}>
         Next anecdote
       </button>
