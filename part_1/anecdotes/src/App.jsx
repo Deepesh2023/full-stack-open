@@ -12,15 +12,10 @@ const App = () => {
     "The only way to go fast, is to go well.",
   ];
 
-  const anecdoteVotePairObject = {};
-  anecdotes.forEach((anecdote) => {
-    anecdoteVotePairObject[anecdote] = 0;
-  });
-
   let [selected, setSelected] = useState(0);
-  const [voteForEachAnecdote, setVoteForSelectedAnecdote] = useState({
-    ...anecdoteVotePairObject,
-  });
+  const [votes, setVote] = useState(new Array(anecdotes.length).fill(0));
+
+  console.log(votes);
 
   const selectRandomAnecdote = () => {
     const randomNumber = Math.round(Math.random() * (anecdotes.length - 1));
@@ -28,26 +23,53 @@ const App = () => {
   };
 
   const voteForCurrentAnecdote = () => {
-    const currentAnecdote = anecdotes[selected];
-    const updatedVoteForCurrentAnecdote = (voteForEachAnecdote[
-      currentAnecdote
-    ] += 1);
-    setVoteForSelectedAnecdote({
-      ...voteForEachAnecdote,
-      currentAnecdote: updatedVoteForCurrentAnecdote,
-    });
+    const votesCopy = [...votes];
+    const updatedVoteForCurrentAnecdote = votes[selected] + 1;
+    votesCopy[selected] = updatedVoteForCurrentAnecdote;
+    setVote([...votesCopy]);
   };
+
+  const largestVote = Math.max(...votes);
+  const largestVoteHolder = anecdotes[votes.indexOf(largestVote)];
+  const winner = { largestVoteHolder, largestVote };
 
   return (
     <>
-      <div>{anecdotes[selected]}</div>
-      <p>Has {voteForEachAnecdote[anecdotes[selected]]}</p>
+      <Heading heading="Anecdote of the day" />
+      <div>
+        <AnecdoteAndVotes
+          anecdote={anecdotes[selected]}
+          votes={votes[selected]}
+        />
+      </div>
       <button type="button" onClick={voteForCurrentAnecdote}>
         Vote
       </button>
       <button type="button" onClick={selectRandomAnecdote}>
         Next anecdote
       </button>
+      <Heading heading="Anecdote with most votes" />
+      <AnecdoteAndVotes
+        anecdote={winner.largestVoteHolder}
+        votes={winner.largestVote}
+      />
+    </>
+  );
+};
+
+const Heading = ({ heading }) => {
+  return (
+    <>
+      <h1>{heading}</h1>
+    </>
+  );
+};
+
+const AnecdoteAndVotes = ({ anecdote, votes }) => {
+  return (
+    <>
+      <p>{anecdote}</p>
+      <p>Has {votes}</p>
     </>
   );
 };
