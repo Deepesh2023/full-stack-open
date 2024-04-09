@@ -1,4 +1,9 @@
 const Course = ({ course }) => {
+  const totalExercises = course.parts.reduce(
+    (sum, part) => sum + part.exercises,
+    0
+  );
+
   return (
     <>
       <Heading heading={course.name} />
@@ -9,6 +14,7 @@ const Course = ({ course }) => {
           partExercises={part.exercises}
         />
       ))}
+      <p>Total of {totalExercises} exercises</p>
     </>
   );
 };
