@@ -8,7 +8,11 @@ const App = () => {
   const addNewNameButtonAction = (event) => {
     event.preventDefault();
 
-    if (newName === "") {
+    const isNameDuplicated = persons.some((person) => person.name === newName);
+
+    if (isNameDuplicated) {
+      alert(`${newName} is already added to phonebook`);
+      setNewName("");
       return;
     }
 
