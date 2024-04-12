@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const AddNewContact = ({ contacts, setContacts }) => {
+const AddNewContact = ({ contacts, setContacts, setFilteredContacts }) => {
   const [newContact, setNewContact] = useState({ name: "", number: "" });
 
   const addNewContactButtonAction = (event) => {
@@ -23,10 +23,12 @@ const AddNewContact = ({ contacts, setContacts }) => {
     const newContactObject = {
       name: newContact.name,
       number: newContact.number,
+      id: contacts.length + 1,
     };
 
     setContacts(contacts.concat(newContactObject));
     setNewContact({ name: "", number: "" });
+    setFilteredContacts([]);
   };
 
   const inputFieldDisply = (event) => {

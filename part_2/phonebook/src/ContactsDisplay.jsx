@@ -1,11 +1,9 @@
-const ContactDisplay = ({ contacts }) => {
-  console.log(contacts);
-
+const ContactsDisplay = ({ contacts }) => {
   return (
     <div>
       <ul>
         {contacts.map((contact) => (
-          <li key={contact.name}>
+          <li key={contact.id}>
             {contact.name}: {contact.number}
           </li>
         ))}
@@ -14,4 +12,4 @@ const ContactDisplay = ({ contacts }) => {
   );
 };
 
-export default ContactDisplay;
+export default ContactsDisplay;
