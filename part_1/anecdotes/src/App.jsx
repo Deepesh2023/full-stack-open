@@ -12,14 +12,12 @@ const App = () => {
     "The only way to go fast, is to go well.",
   ];
 
-  let [selected, setSelected] = useState(0);
+  const [selected, setSelected] = useState(0);
   const [votes, setVote] = useState(new Array(anecdotes.length).fill(0));
-
-  console.log(votes);
 
   const selectRandomAnecdote = () => {
     const randomNumber = Math.round(Math.random() * (anecdotes.length - 1));
-    setSelected((selected = randomNumber));
+    setSelected(randomNumber);
   };
 
   const voteForCurrentAnecdote = () => {
