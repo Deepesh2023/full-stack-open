@@ -1,4 +1,5 @@
 import { useState } from "react";
+import axios from "axios";
 
 const AddNewContact = ({ contacts, setContacts, setFilteredContacts }) => {
   const [newContact, setNewContact] = useState({ name: "", number: "" });
@@ -26,9 +27,11 @@ const AddNewContact = ({ contacts, setContacts, setFilteredContacts }) => {
       id: contacts.length + 1,
     };
 
-    setContacts(contacts.concat(newContactObject));
-    setNewContact({ name: "", number: "" });
-    setFilteredContacts([]);
+    axios.post("http://localhost:3001/persons", newContact).then((respones) => {
+      setContacts(contacts.concat(respones.data));
+      setNewContact({ name: "", number: "" });
+      setFilteredContacts([]);
+    });
   };
 
   const inputFieldDisply = (event) => {
