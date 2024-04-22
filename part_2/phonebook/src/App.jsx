@@ -1,14 +1,14 @@
 import { useState, useEffect } from "react";
 import AddNewContact from "./AddNewContact";
 import ContactsDisplay from "./ContactsDisplay";
-import axios from "axios";
+import phoneBookServices from "./services/phonebook";
 
 const App = () => {
   const [contacts, setContacts] = useState([]);
 
   useEffect(() => {
-    axios.get("http://localhost:3001/persons").then((response) => {
-      setContacts(response.data);
+    phoneBookServices.getAllContacts().then((data) => {
+      setContacts(data);
     });
   }, []);
 

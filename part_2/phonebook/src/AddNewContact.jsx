@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "axios";
+import phoneBookServices from "./services/phonebook";
 
 const AddNewContact = ({ contacts, setContacts, setFilteredContacts }) => {
   const [newContact, setNewContact] = useState({ name: "", number: "" });
@@ -27,8 +27,8 @@ const AddNewContact = ({ contacts, setContacts, setFilteredContacts }) => {
       id: contacts.length + 1,
     };
 
-    axios.post("http://localhost:3001/persons", newContact).then((respones) => {
-      setContacts(contacts.concat(respones.data));
+    phoneBookServices.addNewContact(newContactObject).then((newContact) => {
+      setContacts(contacts.concat(newContact));
       setNewContact({ name: "", number: "" });
       setFilteredContacts([]);
     });
