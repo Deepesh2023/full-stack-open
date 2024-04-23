@@ -1,60 +1,71 @@
-import { useState, useEffect } from "react";
-import AddNewContact from "./AddNewContact";
-import ContactsDisplay from "./ContactsDisplay";
-import phoneBookServices from "./services/phonebook";
+import { useState } from "react";
 
 const App = () => {
-  const [contacts, setContacts] = useState([]);
+  const [persons, setPersons] = useState([]);
+  const [newContact, setNewContact] = useState({ name: "", number: "" });
 
-  useEffect(() => {
-    phoneBookServices.getAllContacts().then((data) => {
-      setContacts(data);
-    });
-  }, []);
-
-  const [searchText, setSearchText] = useState("");
-  const [filteredContacts, setFilteredContacts] = useState([]);
-
-  const searchTextDisply = (event) => {
-    setSearchText(event.target.value);
-    searchResults(event.target.value.toLowerCase());
+  const nameInputDisplay = (event) => {
+    setNewContact({ ...newContact, [event.target.id]: event.target.value });
   };
 
-  const searchResults = (contactName) => {
-    const results = contacts.filter((contact) =>
-      contact.name.toLowerCase().includes(contactName)
-    );
+  const addNewNameButtonAction = (event) => {
+    event.preventDefault();
 
-    if (results.length == 0) {
-      setFilteredContacts([{ name: "No contacts found", number: ":(", id: 0 }]);
-    } else {
-      setFilteredContacts(results);
+    if (persons.some((person) => person.name === newContact.name)) {
+      alert(`${newContact.name} is already added to phonebook`);
+      setNewContact({ name: "", number: "" });
+      return;
     }
+
+    if (newContact.name === "" || newContact.number === "") {
+      return;
+    }
+
+    const newPersonObject = {
+      name: newContact.name,
+      number: newContact.number,
+    };
+    setPersons(persons.concat(newPersonObject));
+    setNewContact({ name: "", number: "" });
   };
 
   return (
-    <>
-      <Heading heading="Phonebook" />
-      <form>
-        <label>Filter shown with</label>
-        <input value={searchText} onChange={searchTextDisply} />
+    <div>
+      <h2>Phonebook</h2>
+      <form onSubmit={addNewNameButtonAction}>
+        <div>
+          name:{" "}
+          <input
+            id="name"
+            type="text"
+            value={newContact.name}
+            onChange={nameInputDisplay}
+          />
+        </div>
+        <div>
+          number:{" "}
+          <input
+            id="number"
+            type="text"
+            value={newContact.number}
+            onChange={nameInputDisplay}
+          />
+        </div>
+        <div>
+          <button type="submit">add</button>
+        </div>
       </form>
-      <Heading heading="Add a new" />
-      <AddNewContact
-        contacts={contacts}
-        setContacts={setContacts}
-        setFilteredContacts={setFilteredContacts}
-      />
-      <Heading heading="Numbers" />
-      <ContactsDisplay
-        contacts={filteredContacts.length == 0 ? contacts : filteredContacts}
-      />
-    </>
+      <h2>Numbers</h2>
+      <ul>
+        {persons.map((person) => (
+          <li key={person.name}>
+            {person.name}: {person.number}
+          </li>
+        ))}
+      </ul>
+      ...
+    </div>
   );
-};
-
-const Heading = ({ heading }) => {
-  return <h1>{heading}</h1>;
 };
 
 export default App;
