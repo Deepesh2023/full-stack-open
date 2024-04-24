@@ -1,16 +1,16 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ContactsDisplay from "./components/ContactsDisplay";
+import phonebook from "./services/phonebook";
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    { name: "Arto Hellas", number: "040-123456", id: 1 },
-    { name: "Ada Lovelace", number: "39-44-5323523", id: 2 },
-    { name: "Dan Abramov", number: "12-43-234345", id: 3 },
-    { name: "Mary Poppendieck", number: "39-23-6423122", id: 4 },
-  ]);
+  const [persons, setPersons] = useState([]);
   const [filteredPersons, setFilteredContacts] = useState([]);
   const [newContact, setNewContact] = useState({ name: "", number: "" });
   const [searchText, setSearchText] = useState("");
+
+  useEffect(() => {
+    phonebook.getAll().then((persons) => setPersons(persons));
+  }, []);
 
   const newContactInputDisplay = (event) => {
     setNewContact({ ...newContact, [event.target.id]: event.target.value });
@@ -43,8 +43,25 @@ const App = () => {
       name: newContact.name,
       number: newContact.number,
     };
-    setPersons(persons.concat(newPersonObject));
+
+    phonebook.post(newPersonObject).then((newPerson) => {
+      setPersons(persons.concat(newPerson));
+    });
+
     setNewContact({ name: "", number: "" });
+  };
+
+  const deleteContact = (person) => {
+    return () => {
+      if (confirm(`Delete ${person.name}?`)) {
+        phonebook.deleteContact(person.id).then((deletedContact) => {
+          setPersons(
+            persons.filter((person) => person.id !== deletedContact.id)
+          );
+        });
+      }
+      return;
+    };
   };
 
   const contacts = filteredPersons.length === 0 ? persons : filteredPersons;
@@ -62,11 +79,11 @@ const App = () => {
       <AddNewPersonForm
         onsubmitFunction={addNewContactButtonAction}
         nameDisplay={newContact.name}
-        ContactsDisplay={newContact.number}
+        numberDisplay={newContact.number}
         onchangeFunction={newContactInputDisplay}
       />
       <Heading heading={"Numbers"} />
-      <ContactsDisplay contacts={contacts} />
+      <ContactsDisplay contacts={contacts} deleteButtonAction={deleteContact} />
     </div>
   );
 };
