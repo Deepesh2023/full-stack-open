@@ -7,7 +7,7 @@ const App = () => {
   const [filteredPersons, setFilteredContacts] = useState([]);
   const [newContact, setNewContact] = useState({ name: "", number: "" });
   const [searchText, setSearchText] = useState("");
-  const [message, setMessage] = useState(null);
+  const [message, setMessage] = useState({ message: null, isError: false });
 
   useEffect(() => {
     phonebook.getAll().then((persons) => setPersons(persons));
@@ -52,9 +52,9 @@ const App = () => {
 
     phonebook.post(newPersonObject).then((newPerson) => {
       setPersons(persons.concat(newPerson));
-      setMessage(`Added ${newPerson.name}`);
+      setMessage({ ...message, message: `Added ${newPerson.name}` });
       setTimeout(() => {
-        setMessage(null);
+        setMessage({ message: null, isError: false });
       }, 5000);
     });
 
@@ -71,14 +71,25 @@ const App = () => {
 
       const updatedContact = { ...person, number: newContact.number };
 
-      phonebook.update(updatedContact).then((updatedContact) => {
-        setPersons(
-          persons.map((person) =>
-            person.id === updatedContact.id ? updatedContact : person
-          )
-        );
-        setNewContact({ name: "", number: "" });
-      });
+      phonebook
+        .update(updatedContact)
+        .then((updatedContact) => {
+          setPersons(
+            persons.map((person) =>
+              person.id === updatedContact.id ? updatedContact : person
+            )
+          );
+          setNewContact({ name: "", number: "" });
+        })
+        .catch((error) => {
+          setMessage({
+            message: `Information of ${updatedContact.name} has already been removed from server`,
+            isError: true,
+          });
+          setTimeout(() => {
+            setMessage({ message: null, isError: false });
+          }, 5000);
+        });
     }
   };
 
@@ -176,7 +187,7 @@ const AddNewPersonForm = ({
 };
 
 const UserMessage = ({ message }) => {
-  const messageBoxStyle = {
+  const successMessageStyle = {
     border: "4px solid #609f62",
     backgroundColor: "#8bb98c",
     color: "#3f6840",
@@ -186,10 +197,17 @@ const UserMessage = ({ message }) => {
     alignItems: "center",
   };
 
-  if (message) {
+  const errorMessageStyle = {
+    ...successMessageStyle,
+    border: "4px solid #851115",
+    backgroundColor: "#ed9a8c",
+    color: "#851115",
+  };
+
+  if (message.message) {
     return (
-      <div style={messageBoxStyle}>
-        <h2>{message}</h2>
+      <div style={message.isError ? errorMessageStyle : successMessageStyle}>
+        <h2>{message.message}</h2>
       </div>
     );
   }
