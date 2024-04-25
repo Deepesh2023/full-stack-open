@@ -7,6 +7,7 @@ const App = () => {
   const [filteredPersons, setFilteredContacts] = useState([]);
   const [newContact, setNewContact] = useState({ name: "", number: "" });
   const [searchText, setSearchText] = useState("");
+  const [message, setMessage] = useState(null);
 
   useEffect(() => {
     phonebook.getAll().then((persons) => setPersons(persons));
@@ -36,26 +37,7 @@ const App = () => {
     }
 
     if (checkIfOnlyNameIsSame()) {
-      if (
-        confirm(
-          `${newContact.name} is already added to phonebook, replace the old number with new one?`
-        )
-      ) {
-        const person = persons.find(
-          (person) => person.name === newContact.name
-        );
-
-        const updatedContact = { ...person, number: newContact.number };
-
-        phonebook.update(updatedContact).then((updatedContact) => {
-          setPersons(
-            persons.map((person) =>
-              person.id === updatedContact.id ? updatedContact : person
-            )
-          );
-          setNewContact({ name: "", number: "" });
-        });
-      }
+      updatePerson();
       return;
     }
 
@@ -70,9 +52,34 @@ const App = () => {
 
     phonebook.post(newPersonObject).then((newPerson) => {
       setPersons(persons.concat(newPerson));
+      setMessage(`Added ${newPerson.name}`);
+      setTimeout(() => {
+        setMessage(null);
+      }, 5000);
     });
 
     setNewContact({ name: "", number: "" });
+  };
+
+  const updatePerson = () => {
+    if (
+      confirm(
+        `${newContact.name} is already added to phonebook, replace the old number with new one?`
+      )
+    ) {
+      const person = persons.find((person) => person.name === newContact.name);
+
+      const updatedContact = { ...person, number: newContact.number };
+
+      phonebook.update(updatedContact).then((updatedContact) => {
+        setPersons(
+          persons.map((person) =>
+            person.id === updatedContact.id ? updatedContact : person
+          )
+        );
+        setNewContact({ name: "", number: "" });
+      });
+    }
   };
 
   const deleteContact = (person) => {
@@ -104,6 +111,7 @@ const App = () => {
   return (
     <div>
       <Heading heading={"Phonebook"} />
+      <UserMessage message={message} />
       <TextInput
         label={"Filter shown with: "}
         id="searchContacts"
@@ -165,6 +173,27 @@ const AddNewPersonForm = ({
       <button type="submit">add</button>
     </form>
   );
+};
+
+const UserMessage = ({ message }) => {
+  const messageBoxStyle = {
+    border: "4px solid #609f62",
+    backgroundColor: "#8bb98c",
+    color: "#3f6840",
+    height: 40,
+    padding: 16,
+    display: "flex",
+    alignItems: "center",
+  };
+
+  if (message) {
+    return (
+      <div style={messageBoxStyle}>
+        <h2>{message}</h2>
+      </div>
+    );
+  }
+  return null;
 };
 
 export default App;
