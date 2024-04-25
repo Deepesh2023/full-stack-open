@@ -12,6 +12,11 @@ const post = (newPerson) => {
   return request.then((response) => response.data);
 };
 
+const update = (updatedPerson) => {
+  const request = axios.put(`${baseUrl}/${updatedPerson.id}`, updatedPerson);
+  return request.then((response) => response.data);
+};
+
 const deleteContact = (personId) => {
   const request = axios.delete(`${baseUrl}/${personId}`);
   return request.then((response) => response.data);
@@ -20,5 +25,6 @@ const deleteContact = (personId) => {
 export default {
   getAll,
   post,
+  update,
   deleteContact,
 };

@@ -29,10 +29,34 @@ const App = () => {
   const addNewContactButtonAction = (event) => {
     event.preventDefault();
 
-    if (persons.some((person) => person.name === newContact.name)) {
+    if (checkIfNameAndNumberPresent()) {
       alert(`${newContact.name} is already added to phonebook`);
       setNewContact({ name: "", number: "" });
       return;
+    }
+
+    if (checkIfOnlyNameIsSame()) {
+      if (
+        confirm(
+          `${newContact.name} is already added to phonebook, replace the old number with new one?`
+        )
+      ) {
+        const updatedContact = persons.find(
+          (person) => person.name === newContact.name
+        );
+
+        updatedContact.number = newContact.number;
+
+        phonebook.update(updatedContact).then((updatedContact) => {
+          setPersons(
+            persons.map((person) =>
+              person.id === updatedContact.id ? updatedContact : person
+            )
+          );
+          setNewContact({ name: "", number: "" });
+        });
+        return;
+      }
     }
 
     if (newContact.name === "" || newContact.number === "") {
@@ -62,6 +86,17 @@ const App = () => {
       }
       return;
     };
+  };
+
+  const checkIfNameAndNumberPresent = () => {
+    return persons.some(
+      (person) =>
+        person.name === newContact.name && person.number === newContact.number
+    );
+  };
+
+  const checkIfOnlyNameIsSame = () => {
+    return persons.some((person) => person.name === newContact.name);
   };
 
   const contacts = filteredPersons.length === 0 ? persons : filteredPersons;
