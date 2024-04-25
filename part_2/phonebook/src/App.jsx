@@ -41,11 +41,11 @@ const App = () => {
           `${newContact.name} is already added to phonebook, replace the old number with new one?`
         )
       ) {
-        const updatedContact = persons.find(
+        const person = persons.find(
           (person) => person.name === newContact.name
         );
 
-        updatedContact.number = newContact.number;
+        const updatedContact = { ...person, number: newContact.number };
 
         phonebook.update(updatedContact).then((updatedContact) => {
           setPersons(
@@ -55,8 +55,8 @@ const App = () => {
           );
           setNewContact({ name: "", number: "" });
         });
-        return;
       }
+      return;
     }
 
     if (newContact.name === "" || newContact.number === "") {
