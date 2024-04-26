@@ -7,7 +7,10 @@ const App = () => {
   const [filteredPersons, setFilteredContacts] = useState([]);
   const [newContact, setNewContact] = useState({ name: "", number: "" });
   const [searchText, setSearchText] = useState("");
-  const [message, setMessage] = useState({ message: null, isError: false });
+  const [notification, setNotification] = useState({
+    message: null,
+    isError: false,
+  });
 
   useEffect(() => {
     phonebook.getAll().then((persons) => setPersons(persons));
@@ -52,9 +55,9 @@ const App = () => {
 
     phonebook.post(newPersonObject).then((newPerson) => {
       setPersons(persons.concat(newPerson));
-      setMessage({ ...message, message: `Added ${newPerson.name}` });
+      setNotification({ ...notification, message: `Added ${newPerson.name}` });
       setTimeout(() => {
-        setMessage({ message: null, isError: false });
+        setNotification({ message: null, isError: false });
       }, 5000);
     });
 
@@ -82,12 +85,12 @@ const App = () => {
           setNewContact({ name: "", number: "" });
         })
         .catch((error) => {
-          setMessage({
+          setNotification({
             message: `Information of ${updatedContact.name} has already been removed from server`,
             isError: true,
           });
           setTimeout(() => {
-            setMessage({ message: null, isError: false });
+            setNotification({ message: null, isError: false });
           }, 5000);
         });
     }
@@ -122,7 +125,7 @@ const App = () => {
   return (
     <div>
       <Heading heading={"Phonebook"} />
-      <UserMessage message={message} />
+      <UserMessage notification={notification} />
       <TextInput
         label={"Filter shown with: "}
         id="searchContacts"
@@ -186,7 +189,7 @@ const AddNewPersonForm = ({
   );
 };
 
-const UserMessage = ({ message }) => {
+const UserMessage = ({ notification }) => {
   const successMessageStyle = {
     border: "4px solid #609f62",
     backgroundColor: "#8bb98c",
@@ -204,10 +207,12 @@ const UserMessage = ({ message }) => {
     color: "#851115",
   };
 
-  if (message.message) {
+  if (notification.message) {
     return (
-      <div style={message.isError ? errorMessageStyle : successMessageStyle}>
-        <h2>{message.message}</h2>
+      <div
+        style={notification.isError ? errorMessageStyle : successMessageStyle}
+      >
+        <h2>{notification.message}</h2>
       </div>
     );
   }

@@ -1,69 +1,24 @@
 {
   "persons": [
     {
+      "name": "Arto Hellas",
+      "number": "040-123456",
+      "id": 1
+    },
+    {
+      "name": "Ada Lovelace",
+      "number": "39-44-5323523",
+      "id": 2
+    },
+    {
       "name": "Dan Abramov",
       "number": "12-43-234345",
-      "id": "3"
+      "id": 3
     },
     {
       "name": "Mary Poppendieck",
       "number": "39-23-6423122",
-      "id": "4"
-    },
-    {
-      "id": "a957",
-      "name": "papan",
-      "number": "654265"
-    },
-    {
-      "id": "80f7",
-      "name": "bagab",
-      "number": "54226432"
-    },
-    {
-      "id": "d382",
-      "name": "vaishnu",
-      "number": "t43256324"
-    },
-    {
-      "id": "1d61",
-      "name": "test",
-      "number": "t326532"
-    },
-    {
-      "id": "a4a4",
-      "name": "test again",
-      "number": "542626"
-    },
-    {
-      "id": "79e7",
-      "name": "hello",
-      "number": "5435435"
-    },
-    {
-      "id": "e59d",
-      "name": "again test ",
-      "number": "5454135"
-    },
-    {
-      "id": "a8e2",
-      "name": "again again test",
-      "number": "541541"
-    },
-    {
-      "id": "d8ca",
-      "name": "new test ",
-      "number": "564625432"
-    },
-    {
-      "id": "7781",
-      "name": "with margin test",
-      "number": "54r36432"
-    },
-    {
-      "id": "adc9",
-      "name": "sadhasivan",
-      "number": "t43t23"
+      "id": 4
     }
   ]
 }
