@@ -2,10 +2,11 @@ import { useState, useEffect } from "react";
 import countriesDataServices from "./services/countriesData";
 
 const App = () => {
+  const [countryNames, setCountryNames] = useState(null);
   const [searchText, setSearchText] = useState("");
   const [countriesFound, setCountriesFound] = useState([]);
-  const [countryNames, setCountryNames] = useState(null);
   const [countryFound, setCountryFound] = useState(null);
+  const [countryInfo, setCountryInfo] = useState(null);
 
   useEffect(() => {
     countriesDataServices.getAllNames().then((countriesData) => {
@@ -15,15 +16,23 @@ const App = () => {
     });
   }, []);
 
+  useEffect(() => {
+    if (countryFound) {
+      console.log("effect is running");
+      countriesDataServices.getCountryInfo(countryFound).then((countryData) => {
+        setCountryInfo(countryData);
+      });
+    }
+  }, [countryFound]);
+
   const searchTextOnChange = (event) => {
     const text = event.target.value;
     const lowerCaseText = text.toLowerCase();
     setSearchText(text);
 
     if (countriesFound.length === 1) {
-      console.log("stop 1");
       if (countriesFound[0].toLowerCase().startsWith(lowerCaseText)) {
-        console.log("stop 2");
+        setCountryFound(countriesFound[0]);
         return;
       }
     }
@@ -32,8 +41,6 @@ const App = () => {
   };
 
   const findCountry = (text) => {
-    console.log("hi");
-
     if (text === "") {
       return;
     }
@@ -45,10 +52,6 @@ const App = () => {
     );
   };
 
-  const getCountryInfo = () => {
-    setCountryFound(countriesFound[0]);
-  };
-
   return (
     <>
       <form>
@@ -56,6 +59,7 @@ const App = () => {
         <input type="text" value={searchText} onChange={searchTextOnChange} />
       </form>
       <FoundCountriesList countries={countriesFound} />
+      <CountryInfo country={countryInfo} />
     </>
   );
 };
@@ -77,13 +81,16 @@ const FoundCountriesList = ({ countries }) => {
 };
 
 const CountryInfo = ({ country }) => {
+  console.log(country);
+
   if (country) {
-    const flagImage = country.flags.svg;
     return (
       <>
         <h1>{country.name.common}</h1>
-        <img src={flagImage} alt="official flag" />
-        <p>{country.capital}</p>
+        <img src={country.flags.svg} alt={country.flags.alt} />
+        <p>Capital: {country.capital}</p>
+        <p>Area: {country.area}</p>
+        <h2>Languages spoken</h2>
       </>
     );
   }
