@@ -84,13 +84,28 @@ const CountryInfo = ({ country }) => {
   console.log(country);
 
   if (country) {
+    const languagesSpoken = Object.values(country.languages);
+    const flagStyle = {
+      height: 200,
+      width: "auto",
+    };
+
     return (
       <>
         <h1>{country.name.common}</h1>
-        <img src={country.flags.svg} alt={country.flags.alt} />
+        <img
+          src={country.flags.svg}
+          alt={country.flags.alt}
+          style={flagStyle}
+        />
         <p>Capital: {country.capital}</p>
         <p>Area: {country.area}</p>
         <h2>Languages spoken</h2>
+        <ul>
+          {languagesSpoken.map((language) => (
+            <li key={language}>{language}</li>
+          ))}
+        </ul>
       </>
     );
   }
