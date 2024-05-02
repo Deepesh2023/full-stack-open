@@ -3,8 +3,9 @@ import countriesDataServices from "./services/countriesData";
 
 const App = () => {
   const [searchText, setSearchText] = useState("");
-  const [countriesFound, setCountriesFound] = useState(null);
+  const [countriesFound, setCountriesFound] = useState([]);
   const [countryNames, setCountryNames] = useState(null);
+  const [countryFound, setCountryFound] = useState(null);
 
   useEffect(() => {
     countriesDataServices.getAllNames().then((countriesData) => {
@@ -17,13 +18,23 @@ const App = () => {
   const searchTextOnChange = (event) => {
     const text = event.target.value;
     setSearchText(text);
+
+    if (countriesFound.length === 1) {
+      if (countriesFound[0].startsWith(text)) {
+        return;
+      }
+    }
+
     findCountry(text.toLowerCase());
   };
 
   const findCountry = (text) => {
+    console.log("hi");
+
     if (text === "") {
       return;
     }
+
     setCountriesFound(
       countryNames.filter((countryName) =>
         countryName.toLowerCase().includes(text)
@@ -31,15 +42,9 @@ const App = () => {
     );
   };
 
-  if (countriesFound) {
-    if (countriesFound.length === 1) {
-      countriesDataServices
-        .getCountryInfo(countriesFound[0])
-        .then((countryInfo) => {
-          console.log(countryInfo);
-        });
-    }
-  }
+  const getCountryInfo = () => {
+    setCountryFound(countriesFound[0]);
+  };
 
   return (
     <>
@@ -69,14 +74,17 @@ const FoundCountriesList = ({ countries }) => {
 };
 
 const CountryInfo = ({ country }) => {
-  const flagImage = country.flags.svg;
-  return (
-    <>
-      <h1>{country.name.common}</h1>
-      <img src={flagImage} alt="official flag" />
-      <p>{country.capital}</p>
-    </>
-  );
+  if (country) {
+    const flagImage = country.flags.svg;
+    return (
+      <>
+        <h1>{country.name.common}</h1>
+        <img src={flagImage} alt="official flag" />
+        <p>{country.capital}</p>
+      </>
+    );
+  }
+  return null;
 };
 
 export default App;
