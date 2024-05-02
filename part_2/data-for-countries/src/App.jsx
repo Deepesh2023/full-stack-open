@@ -17,15 +17,18 @@ const App = () => {
 
   const searchTextOnChange = (event) => {
     const text = event.target.value;
+    const lowerCaseText = text.toLowerCase();
     setSearchText(text);
 
     if (countriesFound.length === 1) {
-      if (countriesFound[0].startsWith(text)) {
+      console.log("stop 1");
+      if (countriesFound[0].toLowerCase().startsWith(lowerCaseText)) {
+        console.log("stop 2");
         return;
       }
     }
 
-    findCountry(text.toLowerCase());
+    findCountry(lowerCaseText);
   };
 
   const findCountry = (text) => {
