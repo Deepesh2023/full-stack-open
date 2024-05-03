@@ -1,7 +1,7 @@
 const CountryInfoDisplay = ({ countryInfo }) => {
   if (countryInfo) {
     const languagesSpoken = Object.values(countryInfo.languages);
-    
+
     const flagStyle = {
       height: 200,
       width: "auto",
@@ -15,7 +15,9 @@ const CountryInfoDisplay = ({ countryInfo }) => {
           alt={countryInfo.flags.alt}
           style={flagStyle}
         />
-        <p>Capital: {countryInfo.capital}</p>
+        <p>
+          Capital(s): {countryInfo.capital.map((capital) => `${capital}, `)}
+        </p>
         <p>Area: {countryInfo.area}</p>
         <h2>Languages spoken</h2>
         <ul>

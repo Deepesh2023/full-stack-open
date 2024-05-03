@@ -53,13 +53,22 @@ const App = () => {
     );
   };
 
+  const showCountryInfoButtonAction = (country) => {
+    return () => {
+      setCountryFound(country);
+    };
+  };
+
   return (
     <>
       <form>
         <label>Search for countries: </label>
         <input type="text" value={searchText} onChange={searchTextOnChange} />
       </form>
-      <FoundCountriesList countries={countriesFound} />
+      <FoundCountriesList
+        countries={countriesFound}
+        showInfoButtonAction={showCountryInfoButtonAction}
+      />
       <CountryInfoDisplay countryInfo={countryInfo} />
     </>
   );
